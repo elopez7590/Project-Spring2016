@@ -6,31 +6,21 @@ import java.sql.Statement;
 
 import org.json.*;
 import edu.marist.metrics_collector.database.helpers.AbstractDatabaseFunctions;
+import java.sql.SQLException;
 
 public class MetricsQueryDao {
 
-   public static Connection getConection() {
+   public static String getAllMetrics() {
       String url = "jdbc:postgresql:dtmngipt01db";
       String user = "dtmng_ipt01db";
       String password = "111111";
-
-      Connection conn = null;
-
-      try {
-         AbstractDatabaseFunctions db = new AbstractDatabaseFunctions();
-         conn = db.connectToDb(url, user, password);
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-      return conn;
-   }
-
-   public static String getAllMetrics() {
+      
       JSONObject json = new JSONObject();
       JSONArray jsonMembers = new JSONArray();
 
       try {
-         Connection conn = getConection();
+         AbstractDatabaseFunctions db = new AbstractDatabaseFunctions();  
+         Connection conn = db.connectToDb(url, user, password);
          Statement statement = conn.createStatement();
 
          // change the sql command if necessary
@@ -50,7 +40,7 @@ public class MetricsQueryDao {
             jsonMembers.put(proJSON);
          }
          json.put("metrics", jsonMembers);
-         conn.close();
+         db.ReleaseDb(conn);
       } catch (Exception e) {
          e.printStackTrace();
       }
