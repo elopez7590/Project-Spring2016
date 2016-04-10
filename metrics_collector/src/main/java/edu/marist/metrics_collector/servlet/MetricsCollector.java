@@ -31,6 +31,7 @@ public class MetricsCollector extends HttpServlet {
      * @throws IOException 
      *             if an error occurred 
      */  
+   @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)  
             throws ServletException, IOException {  
     	System.out.println("servlet started");
@@ -40,16 +41,19 @@ public class MetricsCollector extends HttpServlet {
 	/**
 	 * Handles an HTTP POST request from Plupload.
 	 * 
-	 * @param req The HTTP request
-	 * @param resp The HTTP response
+	 * @param request The HTTP request
+	 * @param response The HTTP response
+    * @throws javax.servlet.ServletException
+    * @throws java.io.IOException
 	 */
+   @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				
 		String metrics = MetricsQueryDao.getAllMetrics();
-    	PrintWriter out = response.getWriter();
-    	out.println(metrics);
-    	out.flush();
-    	out.close();		
+      try (PrintWriter out = response.getWriter()) {
+         out.println(metrics);
+         out.flush();
+      }
 	}
 
 }
