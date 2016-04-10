@@ -1,50 +1,39 @@
 package edu.marist.metrics_collector.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import org.json.*;
-import edu.marist.metrics_collector.database.helpers.AbstractDatabaseFunctions;
-import java.sql.SQLException;
+import edu.marist.metrics_collector.database.accessor.DbAccessor;
+import java.util.ArrayList;
 
 public class MetricsQueryDao {
 
    public static String getAllMetrics() {
-      String url = "jdbc:postgresql:dtmngipt01db";
-      String user = "dtmng_ipt01db";
-      String password = "111111";
       
       JSONObject json = new JSONObject();
       JSONArray jsonMembers = new JSONArray();
 
       try {
-         AbstractDatabaseFunctions db = new AbstractDatabaseFunctions();  
-         Connection conn = db.connectToDb(url, user, password);
-         Statement statement = conn.createStatement();
-
-         // change the sql command if necessary
+         DbAccessor db = new DbAccessor();  
          String sql = "select * from MetricCollection";
-
+         ArrayList<String> results = new ArrayList<>();
+         results = db.getData(sql);         
+         
+         int index = 0;
          // change the attribute name in table if necessary
-         ResultSet rs = statement.executeQuery(sql);
-         while (rs.next()) {
+         while (index < results.size()) {
+            String[] s = results.get(index).split(","); 
             JSONObject proJSON = new JSONObject();
-            proJSON.put("PID", rs.getString("PID"));
-            proJSON.put("processname", rs.getString("processname"));
-            proJSON.put("machinename", rs.getString("machinename"));
-            proJSON.put("parentPID", rs.getString("parentPID"));
-            proJSON.put("totalsize", rs.getString("totalsize"));
-            proJSON.put("dateofcreation", rs.getString("dateofcreation"));
-
+            proJSON.put("PID", s[0]);
+            proJSON.put("processname", s[1]);
+            proJSON.put("machinename", s[2]);
+            proJSON.put("parentPID", s[3]);
+            proJSON.put("totalsize", s[4]);
+            proJSON.put("dateofcreation", s[5]);
             jsonMembers.put(proJSON);
          }
          json.put("metrics", jsonMembers);
-         db.ReleaseDb(conn);
       } catch (Exception e) {
          e.printStackTrace();
       }
-
       return json.toString();
    }
 
