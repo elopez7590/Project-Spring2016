@@ -37,6 +37,7 @@ public class DbAccessor {
         while(rs.next()) {
            String result = rs.getString("PID")+ ","
                    + rs.getString("processname") + ","
+                   + rs.getString("machinename") + ","
                    + rs.getString("parentPID") + ","
                    + rs.getString("totalsize") + ","
                    + rs.getString("dateofcreation");
