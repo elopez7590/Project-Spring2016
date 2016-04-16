@@ -34,7 +34,7 @@ public class Reader {
                           queryValues[1]  + "','" +
                           getHostName()   + "','" +
                           queryValues[3]  + "','" +
-                          Long.parseLong(queryValues[22]) + "','Now()')";
+                          queryValues[22] + "','Now()')";
                queries.add(queryAdd);
                           
             } 
