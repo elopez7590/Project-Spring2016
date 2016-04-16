@@ -53,7 +53,7 @@ public class DbAccessor {
       boolean complete = false;
       
       String database = "jdbc:postgresql:metrics";
-      String user = System.getProperty("User");
+      String user = "postgres";
       String password = "metricsDb";
       try {
          Connection conn = db.connectToDb(database, user, password);
