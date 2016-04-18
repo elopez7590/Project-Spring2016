@@ -19,6 +19,7 @@ import java.sql.Statement;
  */
 public class DbAccessor {
    AbstractDatabaseFunctions db;
+   
    public DbAccessor() throws ClassNotFoundException {
       db = new AbstractDatabaseFunctions();
    }
@@ -60,6 +61,7 @@ public class DbAccessor {
          Statement stmt = conn.createStatement();
          
          complete = stmt.execute(query);
+         stmt.close();
          db.ReleaseDb(conn);
       } catch (Exception e) {
          e.printStackTrace();
