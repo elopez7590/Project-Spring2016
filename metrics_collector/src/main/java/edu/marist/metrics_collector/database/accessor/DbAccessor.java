@@ -28,7 +28,7 @@ public class DbAccessor {
       ArrayList<String> localArr = new ArrayList<>();
       
       String database = "jdbc:postgresql:metrics";
-      String user = System.getProperty("User");
+      String user = "postgres";
       String password = "metricsDb";
       try {
         Connection conn = db.connectToDb(database, user, password);
@@ -38,6 +38,7 @@ public class DbAccessor {
         while(rs.next()) {
            String result = rs.getString("PID")+ ","
                    + rs.getString("processname") + ","
+                   + rs.getString("machinename") + ","
                    + rs.getString("parentPID") + ","
                    + rs.getString("totalsize") + ","
                    + rs.getString("dateofcreation");
