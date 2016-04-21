@@ -61,7 +61,8 @@ public class DbAccessor {
          Connection conn = db.connectToDb(database, user, password);
          Statement stmt = conn.createStatement();
          
-         complete = stmt.execute(query);
+         stmt.execute(query);
+         complete = stmt.getResultSet() != null;
          stmt.close();
          db.ReleaseDb(conn);
       } catch (Exception e) {

@@ -21,30 +21,45 @@ public class Reader {
    public static void main(String[] args) {
       String[] queryValues;
       ArrayList<String> queries = new ArrayList<>();
-      String query = "INSERT INTO metricdata VALUES ('";
+      String queryInsert = "INSERT INTO metricdata VALUES ('";
+      String queryDiscover = "SELECT * FROM metricdata WHERE pid = '";
+      String queryUpdate = "UPDATE metricdata SET parentpid = '";
       File rootDir = new File("/" + args[0]);
-      File[] C = rootDir.listFiles();
       for(File F : rootDir.listFiles()) {
          String queryAdd = "";
          if(F.getName().matches("\\d+")) {
-            if(readFile(F) != null) {
+            boolean results = false;
+            try {
+               DbAccessor db = new DbAccessor();
+               results = db.putData(queryDiscover + F.getName() + "';");
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
+            if(readFile(F) != null && !results) {
                queryValues = readFile(F);
-               queryAdd = query + 
+               queryAdd = queryInsert + 
                           queryValues[0]  + "','" +
                           queryValues[1]  + "','" +
                           getHostName()   + "','" +
                           queryValues[3]  + "','" +
-                          queryValues[22] + "','Now()')";
+                          queryValues[22] + "','Now()');";
+               queries.add(queryAdd);      
+            } else {
+               queryValues = readFile(F);
+               queryAdd = queryUpdate + 
+                          queryValues[3]  + "', totalsize = '" +
+                          queryValues[22] + "' WHERE pid = '" +
+                          queryValues[0]  + "';";
                queries.add(queryAdd);
-                          
-            } 
+               
+            }
          }
       }
       try {
          DbAccessor db = new DbAccessor();
          for(String queryOut : queries) {
             if(db.putData(queryOut)) {
-               System.err.println("Database busy will retry");
+               System.err.println("Database error will retry");
             }
          }
       } catch (Exception e) {
