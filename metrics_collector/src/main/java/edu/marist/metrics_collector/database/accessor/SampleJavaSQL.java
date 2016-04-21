@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sample.java.sql;
+package edu.marist.metrics_collector.database.accessor;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,7 +20,11 @@ public class SampleJavaSQL {
     
     public SampleJavaSQL()
     {
+       try {
         db = new DbAccessor();
+       } catch (Exception e) {
+          e.printStackTrace();
+       }
     }
     
     /**
