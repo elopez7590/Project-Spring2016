@@ -30,9 +30,15 @@ public class SampleJavaSQL {
     /**
      * Updates a process on the table
      */
-    public void updateProcess()
+    public void updateProcess(int pid, String date)
     {
-        
+        try {
+           //db.putData("UPDATE MetricCollection SET WHERE PID = " + pid);      
+        } catch (Exception e) {
+           e.printStackTrace();
+           System.err.println(e.getClass().getName()+": "+e.getMessage());
+           System.exit(0);
+        }
     }
     
     /**
@@ -40,8 +46,6 @@ public class SampleJavaSQL {
      */
     public void deleteProcess(int pid)
     {
-        Connection c = null;
-        Statement stmt = null;
         try {
            db.putData("DELETE FROM MetricCollection WHERE PID = " + pid);      
         } catch (Exception e) {
@@ -56,14 +60,13 @@ public class SampleJavaSQL {
      * 
      * @param 
      */
-    public void insertProcess(ArrayList<String> row)
+    public void insertProcess(String row)
     {
-        Connection c = null;
-        Statement stmt = null;
+        String[] data = row.split(",");
         try {
-            db.putData("INSERT INTO MetricCollection (PID, processname, parentPID, totalsize, dateofcreation) VALUES (" 
-                    + Integer.parseInt(row.get(0)) + ", '" + row.get(1)+ "', " + Integer.parseInt(row.get(2)) 
-                    + ", " + Integer.parseInt(row.get(3)) + ", '" + row.get(4) + "';");
+            db.putData("INSERT INTO MetricCollection (PID, processname, machinename, parentPID, totalsize, dateofcreation) VALUES (" 
+                    + Integer.parseInt(data[0]) + ", '" + data[1] + "', '" + data[2] + "', " + Integer.parseInt(data[3]) 
+                    + ", " + Integer.parseInt(data[4]) + ", '" + data[5] + "';");
         } catch (Exception e) {
            e.printStackTrace();
            System.err.println(e.getClass().getName()+": "+e.getMessage());
