@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sample.java.sql;
+package edu.marist.metrics_collector.database_accessor;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class SampleJavaSQL {
 
     DbAccessor db = null;
+    int interval = 15; //15 seconds is the default
     
     public SampleJavaSQL()
     {
@@ -54,7 +55,7 @@ public class SampleJavaSQL {
     /**
      * Inserts a metric into the SQL table
      * 
-     * @param 
+     * @param row  the metric and information to be sent to the table
      */
     public void insertProcess(String row)
     {
@@ -62,12 +63,41 @@ public class SampleJavaSQL {
         try {
             db.putData("INSERT INTO MetricCollection (PID, processname, machinename, parentPID, totalsize, dateofcreation) VALUES (" 
                     + Integer.parseInt(data[0]) + ", '" + data[1] + "', '" + data[2] + "', " + Integer.parseInt(data[3]) 
-                    + ", " + Integer.parseInt(data[4]) + ", '" + data[5] + "';");
+                    + ", " + Integer.parseInt(data[4]) + ", '" + data[5] + "');");
         } catch (Exception e) {
            e.printStackTrace();
            System.err.println(e.getClass().getName()+": "+e.getMessage());
            System.exit(0);
         }
+    }
+    
+    /**
+     * Create a new table with a specified name
+     * 
+     * @param tableName  the metric and information to be sent to the table
+     */
+    public void createTable(String tableName)
+    {
+        try {
+            String ct = "CREATE TABLE IF NOT EXISTS " + tableName + " (PID char(10) not null, processname char(50) not null, machinename char(50) not null, parentPID char(10), totalsize bigint, dateofcreation date, PRIMARY KEY(PID,processname,machinename));";
+            db.putData(ct);
+        } catch (Exception e) {
+           e.printStackTrace();
+           System.err.println(e.getClass().getName()+": "+e.getMessage());
+           System.exit(0);
+        }
+    }
+    
+    /**
+     * Send ALL data from one table to the GUI
+     * TODO: Interface with GUI
+     * 
+     * @param tableName  the table to be displayed on the GUI
+     */
+    public void sendData(String tableName)
+    {
+        String query = "SELECT * FROM " + tableName;
+        ArrayList<String> data = db.getData();
     }
     
     /**
