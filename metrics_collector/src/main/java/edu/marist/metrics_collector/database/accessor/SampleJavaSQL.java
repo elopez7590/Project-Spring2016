@@ -63,7 +63,7 @@ public class SampleJavaSQL {
         try {
             db.putData("INSERT INTO MetricCollection (PID, processname, machinename, parentPID, totalsize, dateofcreation) VALUES (" 
                     + Integer.parseInt(data[0]) + ", '" + data[1] + "', '" + data[2] + "', " + Integer.parseInt(data[3]) 
-                    + ", " + Integer.parseInt(data[4]) + ", '" + data[5] + "');");
+                    + ", " + Long.parseLong(data[4]) + ", '" + data[5] + "');");
         } catch (Exception e) {
            e.printStackTrace();
            System.err.println(e.getClass().getName()+": "+e.getMessage());
