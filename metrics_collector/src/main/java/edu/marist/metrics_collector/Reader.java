@@ -1,5 +1,8 @@
 /**
- * @filename empty.java
+ * @authors Anthony Cali, Edde Lopez
+ * 
+ * @filename Reader.java
+ * @version 0.8
  */
 package edu.marist.metrics_collector;
 
@@ -14,29 +17,33 @@ import edu.marist.metrics_collector.database.accessor.DbAccessor;
 
 
 /**
- * Metrics Reader class
- * Placeholder
+ * Reader class and implementation.
+ * 
  */
 public class Reader {
+   /**
+    * main method for Reader class also the entrypoint.
+    * @param args Command line arguments for entrypoint.
+    */
    public static void main(String[] args) {
       String[] queryValues;
       ArrayList<String> queries = new ArrayList<>();
       String queryInsert = "INSERT INTO metricdata VALUES ('";
-      String queryDiscover = "SELECT * FROM metricdata WHERE pid = '";
+      String queryDiscover = "SELECT pid FROM metricdata WHERE pid = '";
       String queryUpdate = "UPDATE metricdata SET parentpid = '";
       File rootDir = new File("/" + args[0]);
-      for(File F : rootDir.listFiles()) {
+      for(File search : rootDir.listFiles()) {
          String queryAdd = "";
-         if(F.getName().matches("\\d+")) {
-            boolean results = false;
+         if(search.getName().matches("\\d+")) {
+            boolean noResults = false;
             try {
                DbAccessor db = new DbAccessor();
-               results = db.putData(queryDiscover + F.getName() + "';");
+               noResults = db.runQuery(queryDiscover + search.getName() + "';");
             } catch (Exception e) {
                e.printStackTrace();
             }
-            if(readFile(F) != null && !results) {
-               queryValues = readFile(F);
+            if(readFile(search) != null && !noResults) {
+               queryValues = readFile(search);
                queryAdd = queryInsert + 
                           queryValues[0]  + "','" +
                           queryValues[1]  + "','" +
@@ -44,8 +51,8 @@ public class Reader {
                           queryValues[3]  + "','" +
                           queryValues[22] + "','Now()');";
                queries.add(queryAdd);      
-            } else {
-               queryValues = readFile(F);
+            } else if (readFile(search) != null && noResults) {
+               queryValues = readFile(search);
                queryAdd = queryUpdate + 
                           queryValues[3]  + "', totalsize = '" +
                           queryValues[22] + "' WHERE pid = '" +
@@ -68,31 +75,41 @@ public class Reader {
       }
    }
    
+   /**
+    * readFile method for getting the metric data content.
+    * @param in : Input file for metric to be collected.
+    * @return String[]: An array of metrics.
+    */
    private static String[] readFile(File in) {
       String[] out = null;
-      BufferedReader toRead;
+      BufferedReader fileReader;
       try {
-      toRead = new BufferedReader(new FileReader(
+      fileReader = new BufferedReader(new FileReader(
                                          in.getPath()+ "/stat"));
-         out = (toRead.readLine()).split(" ");
-         toRead.close();
+         out = (fileReader.readLine()).split(" ");
+         fileReader.close();
       } catch (Exception e) {
          e.printStackTrace();
          System.err.println("File access error");
-         System.exit(1);
       }
       return out;
    }
    
+   /**
+    * getHostName method for getting the machine (host) name.
+    * @return String: The machine (host) name or Unknown.
+    */
    private static String getHostName() {
+      String out = "Unknown";
+      String filepath = "/proc/sys/kernel/hostname";
+      BufferedReader hostReader;
       try {
-         Runtime r = Runtime.getRuntime();
-         Process p = r.exec("uname -n");
-         BufferedReader x = new BufferedReader(new InputStreamReader(p.getInputStream()));
-         return x.readLine();
+         hostReader = new BufferedReader(new FileReader(filepath));
+         out = hostReader.readLine();
+         hostReader.close();
       } catch (Exception e) {
          e.printStackTrace();
       } 
-      return "Unknown";
+      return out;
    }
 }

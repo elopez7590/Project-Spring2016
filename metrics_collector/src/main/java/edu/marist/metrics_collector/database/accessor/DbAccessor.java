@@ -1,7 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * @authors Anthony Cali, Edde Lopez
+ * 
+ * @filename DbAccessor.java
+ * @version 0.9
+ * 
  */
 package edu.marist.metrics_collector.database.accessor;
 
@@ -14,12 +17,18 @@ import java.sql.Statement;
 
 
 /**
- *
- * @author Anthony Cali
+ * DbAccessor class and implementation.
+ * 
  */
 public class DbAccessor {
    AbstractDatabaseFunctions db;
    
+   /**
+    * DbAccessor constructor;
+    * 
+    * @throws ClassNotFoundException if the PostgreSQL database
+    *         class implementation is not found.
+    */
    public DbAccessor() throws ClassNotFoundException {
       db = new AbstractDatabaseFunctions();
    }
@@ -51,8 +60,13 @@ public class DbAccessor {
       return localArr;
    }
    
+   /**
+    * putData method for sending data to the database.
+    * @param query the query string (Database operation).
+    * @return if there is a result set or not.
+    */
    public boolean putData(String query) {
-      boolean complete = false;
+      boolean output = false;
       
       String database = "jdbc:postgresql:metrics";
       String user = "postgres";
@@ -61,13 +75,37 @@ public class DbAccessor {
          Connection conn = db.connectToDb(database, user, password);
          Statement stmt = conn.createStatement();
          
-         stmt.execute(query);
-         complete = stmt.getResultSet() != null;
+         output = stmt.execute(query);
          stmt.close();
          db.ReleaseDb(conn);
       } catch (Exception e) {
          e.printStackTrace();
       }
-      return complete;
+      return output;
+   }
+   
+   /**
+    * runQuery method for sending data to the database.
+    * @param query the query string (Database SELECT operation).
+    * @return if there is a result set or not.
+    */
+   public boolean runQuery(String query) {
+      boolean output = false;
+      
+      String database = "jdbc:postgresql:metrics";
+      String user = "postgres";
+      String password = "metricsDb";
+      try {
+         Connection conn = db.connectToDb(database, user, password);
+         Statement stmt = conn.createStatement();
+         
+         ResultSet result = stmt.executeQuery(query);
+         output = result.next();
+         stmt.close();
+         db.ReleaseDb(conn);
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+      return output;
    }
 }
