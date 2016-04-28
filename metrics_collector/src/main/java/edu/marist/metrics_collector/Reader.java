@@ -20,11 +20,24 @@ import edu.marist.metrics_collector.database.accessor.DbAccessor;
  * 
  */
 public class Reader {
+   
+   private String Hostname = "";
+   
+   /**
+    * Reader constructor.
+    *   Sets the Hostname of the Reader.
+    */
+   public Reader() {
+      Hostname = getHostName();
+   }
    /**
     * main method for Reader class also the entrypoint.
     * @param args Command line arguments for entrypoint.
     */
    public static void main(String[] args) {
+      Reader reader = new Reader();
+      long time0 = System.currentTimeMillis();
+      long time1, timeFinal = 0L;
       String[] queryValues;
       ArrayList<String> queries = new ArrayList<>();
       String queryInsert = "INSERT INTO metricdata VALUES ('";
@@ -33,7 +46,7 @@ public class Reader {
       File rootDir = new File("/" + args[0]);
       for(File search : rootDir.listFiles()) {
          String queryAdd = "";
-         if(search.getName().matches("\\d+")) {
+         if(search.getName().matches("\\d+") && readFile(search) != null) {
             boolean noResults = false;
             try {
                DbAccessor db = new DbAccessor();
@@ -41,20 +54,20 @@ public class Reader {
             } catch (Exception e) {
                e.printStackTrace();
             }
-            if(readFile(search) != null && !noResults) {
+            if(!noResults) {
                queryValues = readFile(search);
                queryAdd = queryInsert + 
                           queryValues[0]  + "','" +
                           queryValues[1]  + "','" +
-                          getHostName()   + "','" +
+                          reader.Hostname + "','" +
                           queryValues[3]  + "','" +
-                          queryValues[22] + "','Now()');";
+                          queryValues[23] + "','Now()');";
                queries.add(queryAdd);      
-            } else if (readFile(search) != null && noResults) {
+            } else {
                queryValues = readFile(search);
                queryAdd = queryUpdate + 
                           queryValues[3]  + "', totalsize = '" +
-                          queryValues[22] + "' WHERE pid = '" +
+                          queryValues[23] + "' WHERE pid = '" +
                           queryValues[0]  + "';";
                queries.add(queryAdd);
                
@@ -68,10 +81,14 @@ public class Reader {
                System.err.println("Database error will retry");
             }
          }
+         time1 = System.currentTimeMillis();
+         timeFinal = (time1 - time0)/1000L;
       } catch (Exception e) {
          e.printStackTrace();
          System.exit(2);
       }
+      
+      System.err.println("Reader execution completed in " + timeFinal + " seconds.");
    }
    
    /**
@@ -80,12 +97,14 @@ public class Reader {
     * @return String[]: An array of metrics.
     */
    private static String[] readFile(File in) {
+      Long pageSize = 4096L;
       String[] out = null;
       BufferedReader fileReader;
       try {
       fileReader = new BufferedReader(new FileReader(
                                          in.getPath()+ "/stat"));
          out = (fileReader.readLine()).split(" ");
+         out[23] = ((Long)(Long.parseLong(out[23]) * pageSize)).toString();
          fileReader.close();
       } catch (Exception e) {
          e.printStackTrace();
