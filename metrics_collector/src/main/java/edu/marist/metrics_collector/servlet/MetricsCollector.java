@@ -23,7 +23,7 @@ import edu.marist.metrics_collector.dao.MetricsQueryDao;
 public class MetricsCollector extends HttpServlet {
 	
 	/**
-	 * 
+	 * Servlet version Unique Identifier.
 	 */
 	private static final long serialVersionUID = 2734313777055681639L;
 
