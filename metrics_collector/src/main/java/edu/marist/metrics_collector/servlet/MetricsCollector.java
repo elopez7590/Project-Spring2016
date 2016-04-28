@@ -1,3 +1,9 @@
+/**
+ * 
+ * @filename MetricsCollector.java
+ * @author Hongchao Young
+ * @editor Anthony Cali, Edde Lopez
+ */
 package edu.marist.metrics_collector.servlet;
 
 import java.io.IOException;
@@ -10,6 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.marist.metrics_collector.dao.MetricsQueryDao;
 
+/**
+ * MetricsCollector class definition and implementation.
+ * 
+ */
 public class MetricsCollector extends HttpServlet {
 	
 	/**

@@ -1,11 +1,27 @@
+/**
+ * 
+ * @filename MetricsQueryDao.java
+ * @author Hongchao Young
+ * @editor Anthony Cali, Edde Lopez
+ */
 package edu.marist.metrics_collector.dao;
 
 import org.json.*;
 import edu.marist.metrics_collector.database.accessor.DbAccessor;
 import java.util.ArrayList;
 
+/**
+ * 
+ * MetricsQueryDao class definition and implementation.
+ * 
+ */
 public class MetricsQueryDao {
-
+   
+   /**
+    * getAllMetrics method for getting the database tables as
+    *               JSON for the GUI.
+    * @return static String: The JSON as a string. 
+    */
    public static String getAllMetrics() {
       
       JSONObject json = new JSONObject();

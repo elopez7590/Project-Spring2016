@@ -1,7 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * @filename: SampleJavaSQL
  */
 package edu.marist.metrics_collector.database.accessor;
 
@@ -16,6 +15,9 @@ public class SampleJavaSQL {
     DbAccessor db = null;
     int interval = 15; //15 seconds is the default
     
+    /**
+     * SampleJavaSQL constructor.
+     */
     public SampleJavaSQL()
     {
        try {
@@ -26,7 +28,7 @@ public class SampleJavaSQL {
     }
     
     /**
-     * Updates a process on the table
+     * updateProcess method, Updates a process in the database.
      */
     public void updateProcess(int pid, String date)
     {
@@ -40,7 +42,7 @@ public class SampleJavaSQL {
     }
     
     /**
-     * Deletes a process from the table
+     * deleteProcess method, Deletes a process from the database.
      */
     public void deleteProcess(int pid)
     {
@@ -54,9 +56,9 @@ public class SampleJavaSQL {
     }
     
     /**
-     * Inserts a metric into the SQL table
+     * Inserts a metric into the SQL database.
      * 
-     * @param row  the metric and information to be sent to the table
+     * @param row String:  The metric and information to be sent to the database.
      */
     public void insertProcess(String row)
     {
@@ -73,9 +75,10 @@ public class SampleJavaSQL {
     }
     
     /**
-     * Create a new table with a specified name
+     * Create a new table with a specified name.
      * 
-     * @param tableName  the metric and information to be sent to the table
+     * @param tableName String:  The metric and information to be sent to the database
+     *                           for making a new table.
      */
     public void createTable(String tableName)
     {
@@ -90,10 +93,10 @@ public class SampleJavaSQL {
     }
     
     /**
-     * Send ALL data from one table to the GUI
-     * TODO: Interface with GUI
+     * Send ALL data from one table to the GUI.
+     * TODO: Interface with GUI.
      * 
-     * @param tableName  the table to be displayed on the GUI
+     * @param tableName String:  The table to be displayed on the GUI.
      */
     public void sendData(String tableName)
     {
@@ -102,7 +105,7 @@ public class SampleJavaSQL {
     }
     
     /**
-     * @param args the command line arguments
+     * @param args String[]: The command line argument(s).
      */
     public static void main(String[] args) {
         
