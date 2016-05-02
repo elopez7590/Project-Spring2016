@@ -4,6 +4,9 @@
  */
 package edu.marist.metrics_collector.database.accessor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author EddeAnthony
@@ -22,6 +25,22 @@ public class SampleJavaSQL {
         db = new DbAccessor();
        } catch (Exception e) {
        }
+    }
+    
+
+    /**
+     * getAllData  Gets all rows from a table
+     */
+    public ArrayList<String> getAllData()
+    {
+        ArrayList<String> al = null;
+        try {
+           al = db.getData("SELECT * FROM MetricCollection");      
+        } catch (Exception e) {
+           System.err.println(e.getClass().getName()+": "+e.getMessage());
+        }
+        
+        return al;
     }
     
     /**
