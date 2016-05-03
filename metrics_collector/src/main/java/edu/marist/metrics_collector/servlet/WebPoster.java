@@ -7,17 +7,11 @@
 package edu.marist.metrics_collector.servlet;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import javax.script.Invocable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 
 
@@ -47,34 +41,11 @@ public class WebPoster extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)  
             throws ServletException, IOException {  
         
-        
         doPost(request, response);  
     }  
-    
-    /**
-    * 
-    *
-    */
-    public void refreshTable()
-    {
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
-        
-        try
-        {
-            engine.eval(Files.newBufferedReader(Paths.get(javascriptFunctions), StandardCharsets.UTF_8));
-            Invocable inv = (Invocable) engine;
-            String refreshScript = "function refresh()"; //may need to change this, more detail
-            inv.invokeFunction("refreshScript");
-        }
-        catch (Exception e)
-        {
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-        }
-        
-    }
 	
     /**
-     * Handles an HTTP POST request from Plupload.
+     * This will post rows to the GUI.
      * 
      * @param request The HTTP request
      * @param response The HTTP response
@@ -84,13 +55,32 @@ public class WebPoster extends HttpServlet {
    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				
-            ScriptEngineManager manager = new ScriptEngineManager();
-            ScriptEngine engine = manager.getEngineByName("JavaScript");
-
+            //Call Chris's JSP page here
+            request.getRequestDispatcher("metrics.jsp").forward(request, response);
+            
             SampleJavaSQL sj = new SampleJavaSQL();
             ArrayList<String> al = sj.getAllData();
             //TODO: Transfer this data to Table
-            refreshTable();
+            
+            DataTable dt = (DataTable)Session[""];
+            for (String row : al)
+            {
+                String[] data = row.split(",");
+                DataRow dr = dt.NewRow();
+                dr["pidCell"] = Integer.parseInt(data[0]);
+                dr["nameCell"] = data[1];
+                dr["machineCell"] = data[2];
+                dr["parentCell"] = Integer.parseInt(data[3]);
+                dr["sizeCell"] = Long.parseLong(data[4])
+                dr["dateCell"] = data[5];
+                dt.Rows.Add(dr);
+            }
+            
 	}
+        
+        public void addMetric(String s)
+        {
+            
+        }
 
 }
