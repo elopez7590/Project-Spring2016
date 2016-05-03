@@ -1,8 +1,7 @@
 /**
  * 
  * @filename WebPoster.java
- * @author Hongchao Young
- * @editor Anthony Cali, Edde Lopez
+ * @author Anthony Cali, Edde Lopez
  */
 package edu.marist.metrics_collector.servlet;
 
