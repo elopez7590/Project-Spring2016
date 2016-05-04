@@ -18,7 +18,6 @@
 <script
 	src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script src="../js/bootstrap.min.js"></script>
-<script src="../js/echarts-plain-map.js"></script>
 </head>
 
 <body>
@@ -48,8 +47,6 @@
 				style="height: inherit; padding-left: 0px; padding-right: 0px; background-color: #f7f7f7;">
 				<ul class="nav nav-pills nav-stacked" style="height: 100%;">
 					<li class="active"><a href="#">Metrics</a></li>
-					<li><a href="#">outline</a></li>
-					<li><a href="#">details</a></li>
 				</ul>
 			</div>
 			<div class="col-md-10" id="column" style="padding-top: 10px">
@@ -87,8 +84,6 @@
 					</tbody>
 				</table>
 
-				<div id="chart"
-					style="height: 400px; border: 1px solid #ccc; margin-top: 20px;"></div>
 			</div>
 		</div>
 	</div>
@@ -98,11 +93,7 @@
 			$('#datatable').DataTable();
 		});
 
-		var myChart = echarts.init(document.getElementById('chart'));
-//		var times = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-//				0, 0, 0, 0);
-		var times = new Array(2, 3, 5, 4, 2, 7, 4, 8, 4, 2, 5, 8, 5, 3, 1, 4,
-				6, 5, 9, 8);
+
 		var interval = 15;
 
 		function changeInterval() {
@@ -110,76 +101,16 @@
 			interval = newInterval;
 		}
 
-		function refreshChart(times) {
-			myChart.setOption({
-				title : {
-					text : 'Size for all processes',
-					textStyle : {
-						fontSize : 12
-					}
-				},
-				tooltip : {
-					trigger : 'axis'
-				},
-				grid : {
-					x : 55,
-					x2 : 30
-				},
-				toolbox : {
-					show : false,
-					feature : {
-						magicType : {
-							show : true,
-							type : [ 'line', 'bar' ]
-						},
-						restore : {
-							show : true
-						},
-						saveAsImage : {
-							show : true
-						}
-					}
-				},
-				calculable : true,
-				xAxis : [ {
-					type : 'category',
-					boundaryGap : false,
-					data : [ '0s', interval + 's', interval*2 + 's',
-							interval*3 + 's', interval*4 + 's', interval*5 + 's',
-							interval*6 + 's', interval*7 + 's', interval*8 + 's',
-							interval*9 + 's', interval*10 + 's', interval*11 + 's',
-							interval*12 + 's', interval*13 + 's', interval*14 + 's',
-							interval*15 + 's', interval*16 + 's', interval*17 + 's',
-							interval*18 + 's', interval*19 + 's' ]
-				} ],
-				yAxis : [ {
-					type : 'value',
-					axisLabel : {
-						rotate : 50
-					}
-				} ],
-				series : [ {
-					name : '刷卡次数',
-					type : 'line',
-					smooth : true,
-					itemStyle : {
-						normal : {
-							areaStyle : {
-								color : 'rgba(138, 43, 226, 0.5)'
-							}
-						}
-					},
-					data : times
-				} ]
-			});
-		}
-		
-		function temp()
-		{
-			refreshChart(times);
-		}
-		
-		temp();
+      function staticBool() {
+         this.state = !this.state || true;
+      }
+
+      function updateMemory(var memoryVal) {
+         var nav = document.getElementById("Nav");
+         var memory = document.createElement("li");
+         memory.innerHTML = "Max Memory: " + memoryVal;
+         nav.appendChild(memory);
+      }
 
 		function refresh() {
 			var request = new XMLHttpRequest();
@@ -212,6 +143,11 @@
 						parentCell.innerHTML = metric.parentPID;
 						sizeCell.innerHTML = metric.totalsize;
 						dateCell.innerHTML = metric.dateofcreation;
+                  
+                  if(staticBool()) {
+                     updateMemory(metric.totalram);
+                     staticBool();
+                  }
 
 						line.appendChild(pidCell);
 						line.appendChild(nameCell);
@@ -227,7 +163,6 @@
 					for (var i = times.length - 1; i > 0; i--)
 						times[i] = times[i - 1];
 					times[0] = total;
-					refreshChart(times);
 
 					$(document).ready(function() {
 						$('#datatable').DataTable();
