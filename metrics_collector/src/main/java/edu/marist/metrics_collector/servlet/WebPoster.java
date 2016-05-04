@@ -39,7 +39,6 @@ public class WebPoster extends HttpServlet {
    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)  
             throws ServletException, IOException {  
-        
         doPost(request, response);  
     }  
 	
@@ -55,31 +54,8 @@ public class WebPoster extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				
             //Call Chris's JSP page here
-            request.getRequestDispatcher("metrics.jsp").forward(request, response);
-            
-            SampleJavaSQL sj = new SampleJavaSQL();
-            ArrayList<String> al = sj.getAllData();
-            //TODO: Transfer this data to Table
-            
-            /*DataTable dt = (DataTable)Session[""];
-            for (String row : al)
-            {
-                String[] data = row.split(",");
-                DataRow dr = dt.NewRow();
-                dr["pidCell"] = Integer.parseInt(data[0]);
-                dr["nameCell"] = data[1];
-                dr["machineCell"] = data[2];
-                dr["parentCell"] = Integer.parseInt(data[3]);
-                dr["sizeCell"] = Long.parseLong(data[4])
-                dr["dateCell"] = data[5];
-                dt.Rows.Add(dr);
-            }*/
+            request.getRequestDispatcher("metrics.jsp").forward(request, response);  
             
 	}
-        
-        public void addMetric(String s)
-        {
-            
-        }
 
 }
