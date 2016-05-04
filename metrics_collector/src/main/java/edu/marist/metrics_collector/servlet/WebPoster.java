@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import edu.marist.metrics_collector.database.accessor.SampleJavaSQL;
 
 /**
  * MetricsCollector class definition and implementation.
@@ -61,7 +61,7 @@ public class WebPoster extends HttpServlet {
             ArrayList<String> al = sj.getAllData();
             //TODO: Transfer this data to Table
             
-            DataTable dt = (DataTable)Session[""];
+            /*DataTable dt = (DataTable)Session[""];
             for (String row : al)
             {
                 String[] data = row.split(",");
@@ -73,7 +73,7 @@ public class WebPoster extends HttpServlet {
                 dr["sizeCell"] = Long.parseLong(data[4])
                 dr["dateCell"] = data[5];
                 dt.Rows.Add(dr);
-            }
+            }*/
             
 	}
         
