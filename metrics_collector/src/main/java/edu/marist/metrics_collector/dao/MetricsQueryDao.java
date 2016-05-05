@@ -8,6 +8,7 @@ package edu.marist.metrics_collector.dao;
 
 import org.json.*;
 import edu.marist.metrics_collector.database.accessor.DbAccessor;
+import java.util.List;
 import java.util.ArrayList;
 
 /**
@@ -29,8 +30,8 @@ public class MetricsQueryDao {
 
       try {
          DbAccessor db = new DbAccessor();  
-         String sql = "select * from MetricCollection";
-         ArrayList<String> results = new ArrayList<>();
+         String sql = "select * from metrics";
+         List<String> results = new ArrayList<>();
          results = db.getData(sql);         
          
          int index = 0;

@@ -9,6 +9,7 @@
 package edu.marist.metrics_collector.database.accessor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.marist.metrics_collector.database.helpers.AbstractDatabaseFunctions;
 import java.sql.Connection;
@@ -33,10 +34,16 @@ public class DbAccessor {
       db = new AbstractDatabaseFunctions();
    }
    
-   public ArrayList<String> getData(String query) {
-      ArrayList<String> localArr = new ArrayList<>();
+   /**
+    * 
+    * getData method executes a query.
+    * @param query String: The query to execute.
+    * @return String List: The results.
+    */
+   public List<String> getData(String query) {
+      List<String> localArr = new ArrayList<>();
       
-      String database = "jdbc:postgresql:metrics";
+      String database = "jdbc:postgresql:MetricCollection";
       String user = "postgres";
       String password = "metricsDb";
       try {
@@ -68,7 +75,7 @@ public class DbAccessor {
    public boolean putData(String query) {
       boolean output = false;
       
-      String database = "jdbc:postgresql:metrics";
+      String database = "jdbc:postgresql:MetricCollection";
       String user = "postgres";
       String password = "metricsDb";
       try {
@@ -92,7 +99,7 @@ public class DbAccessor {
    public boolean runQuery(String query) {
       boolean output = false;
       
-      String database = "jdbc:postgresql:metrics";
+      String database = "jdbc:postgresql:MetricCollection";
       String user = "postgres";
       String password = "metricsDb";
       try {

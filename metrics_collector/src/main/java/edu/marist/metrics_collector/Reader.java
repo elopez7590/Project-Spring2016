@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 
 import edu.marist.metrics_collector.database.accessor.DbAccessor;
+import java.util.List;
 
 
 /**
@@ -39,10 +40,10 @@ public class Reader {
       long time0 = System.currentTimeMillis();
       long time1, timeFinal = 0L;
       String[] queryValues;
-      ArrayList<String> queries = new ArrayList<>();
-      String queryInsert = "INSERT INTO metricdata VALUES ('";
-      String queryDiscover = "SELECT pid FROM metricdata WHERE pid = '";
-      String queryUpdate = "UPDATE metricdata SET parentpid = '";
+      List<String> queries = new ArrayList<>();
+      String queryInsert = "INSERT INTO metrics VALUES ('";
+      String queryDiscover = "SELECT pid FROM metrics WHERE pid = '";
+      String queryUpdate = "UPDATE metrics SET parentpid = '";
       File rootDir = new File("/" + args[0]);
       for(File search : rootDir.listFiles()) {
          String queryAdd = "";

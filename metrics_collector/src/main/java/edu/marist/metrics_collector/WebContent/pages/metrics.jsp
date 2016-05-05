@@ -1,10 +1,11 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title>Metrics Collector</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- 引入 Bootstrap -->
+<!-- å¼•å…¥ Bootstrap -->
 <link href="../css/bootstrap.min.css" rel="stylesheet">
 <link href="../css/jquery-ui.css" rel="stylesheet">
 <link href="../css/dataTables.jqueryui.min.css" rel="stylesheet">
@@ -62,26 +63,41 @@
 							<th>Date of Creation</th>
 						</tr>
 					</thead>
-					<tbody id="tableBody">
-
+                                        <tbody id="tableBody">
+                                        <%
+                                        try
+                                        {
+                                        Class.forName("org.postgresql.driver");
+                                        String username="postgres";
+                                        String password="metricsDb";
+                                        String database="jdbc:postgresql:MetricCollection";
+                                        String query="SELECT * FROM metrics";
+                                        Connection conn = DriverManager.getConnection(database, username, password);
+                                        Statement stmt = conn.createStatement();
+                                        ResultSet rs=stmt.executeQuery(query);
+                                        while(rs.next())
+                                        {
+                                        %>
 						<tr>
-							<td>0001</td>
-							<td>text editor</td>
-							<td>my computer</td>
-							<td>0003</td>
-							<td>10094</td>
-							<td>20160406</td>
-						</tr>
-
-						<tr>
-							<td>0002</td>
-							<td>photo viewer</td>
-							<td>my computer</td>
-							<td>0004</td>
-							<td>33557</td>
-							<td>20160405</td>
+							<td><%=rs.getString("pid") %></td>
+							<td><%=rs.getString("processname") %></td>
+                     <td><%=rs.getString("machinename") %></td>
+                     <td><%=rs.getString("parentpid") %></td>
+                     <td><%=rs.getString("totalsize") %></td>
+                     <td><%=rs.getString("dateofcreation") %></td>
 						</tr>
 					</tbody>
+                                        <%
+                                        }
+                                        rs.close();
+                                        stmt.close();
+                                        conn.close();
+                                        }
+                                        catch(Exception e)
+                                        {
+                                        e.printStackTrace();
+                                        }
+                                        %>
 				</table>
 
 			</div>
@@ -112,7 +128,7 @@
          nav.appendChild(memory);
       }
 
-		function refresh() {
+		/*function refresh() {
 			var request = new XMLHttpRequest();
 			request.onreadystatechange = function() {
 				if (request.readyState == 4 && request.status == 200) {
@@ -172,8 +188,8 @@
 			request.open("GET", "../MetricsCollector", true);
 			request.send(null);
 
-		}
-//		setTimeout('refresh()', interval * 1000); //指定1秒刷新一次
+		}*/
+//		setTimeout('refresh()', interval * 1000); //æŒ‡å®š1ç§’åˆ·æ–°ä¸€æ¬¡
 	</script>
 </body>
 </html>

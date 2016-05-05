@@ -30,12 +30,14 @@ public class SampleJavaSQL {
 
     /**
      * getAllData  Gets all rows from a table
+     * 
+     * @return String List: The row data. 
      */
-    public ArrayList<String> getAllData()
+    public List<String> getAllData()
     {
-        ArrayList<String> al = null;
+        List<String> al = new ArrayList<>();
         try {
-           al = db.getData("SELECT * FROM MetricCollection");      
+           al = db.getData("SELECT * FROM metrics");      
         } catch (Exception e) {
            System.err.println(e.getClass().getName()+": "+e.getMessage());
         }
@@ -49,7 +51,7 @@ public class SampleJavaSQL {
     public void deleteProcess(int pid)
     {
         try {
-           db.putData("DELETE FROM MetricCollection WHERE PID = " + pid);      
+           db.putData("DELETE FROM metrics WHERE PID = " + pid);      
         } catch (Exception e) {
            System.err.println(e.getClass().getName()+": "+e.getMessage());
         }
@@ -64,7 +66,7 @@ public class SampleJavaSQL {
     {
         String[] data = row.split(",");
         try {
-            db.putData("INSERT INTO MetricCollection (PID, processname, machinename, parentPID, totalsize, dateofcreation) VALUES (" 
+            db.putData("INSERT INTO metrics (PID, processname, machinename, parentPID, totalsize, dateofcreation) VALUES (" 
                     + Integer.parseInt(data[0]) + ", '" + data[1] + "', '" + data[2] + "', " + Integer.parseInt(data[3]) 
                     + ", " + Long.parseLong(data[4]) + ", '" + data[5] + "');");
         } catch (Exception e) {
