@@ -1,5 +1,11 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*"%>
+<%@ page import="java.io.*,java.sql.*,java.util.*"%>
+<%@ page import="javax.servlet.http.*,java.servlet.*"%>
+
+<% Class.forName("org.postgresql.Driver");
+   Connection conn = 
+      DriverManager.getConnection("jdbc:postgresql:MetricCollection", "postgres", "metricsDb");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,6 +28,9 @@
 </head>
 
 <body>
+   <% Statement stmt = conn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT * FROM metrics");
+   %>
 	<div class="container-fluid"
 		style="padding-left: 0px; padding-right: 0px;" id="container">
 
@@ -63,41 +72,18 @@
 							<th>Date of Creation</th>
 						</tr>
 					</thead>
-                                        <tbody id="tableBody">
-                                        <%
-                                        try
-                                        {
-                                        Class.forName("org.postgresql.driver");
-                                        String username="postgres";
-                                        String password="metricsDb";
-                                        String database="jdbc:postgresql:MetricCollection";
-                                        String query="SELECT * FROM metrics";
-                                        Connection conn = DriverManager.getConnection(database, username, password);
-                                        Statement stmt = conn.createStatement();
-                                        ResultSet rs=stmt.executeQuery(query);
-                                        while(rs.next())
-                                        {
-                                        %>
+               <tbody id="tableBody">
+                  <% while(rs.next()) { %>
 						<tr>
-							<td><%=rs.getString("pid") %></td>
-							<td><%=rs.getString("processname") %></td>
-                     <td><%=rs.getString("machinename") %></td>
-                     <td><%=rs.getString("parentpid") %></td>
-                     <td><%=rs.getString("totalsize") %></td>
-                     <td><%=rs.getString("dateofcreation") %></td>
+							<td align="center"><%= rs.getString("pid")%></td>
+							<td align="center"><%=rs.getString("processname")%></td>
+                     <td align="center"><%=rs.getString("machinename")%></td>
+                     <td align="center"><%=rs.getString("parentpid")%></td>
+                     <td align="center"><%=rs.getLong("totalsize")%></td>
+                     <td align="center"><%=rs.getDate("dateofcreation")%></td>
 						</tr>
-					</tbody>
-                                        <%
-                                        }
-                                        rs.close();
-                                        stmt.close();
-                                        conn.close();
-                                        }
-                                        catch(Exception e)
-                                        {
-                                        e.printStackTrace();
-                                        }
-                                        %>
+                  <%} %>
+               </tbody>
 				</table>
 
 			</div>

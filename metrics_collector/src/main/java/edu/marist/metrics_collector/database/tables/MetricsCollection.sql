@@ -18,7 +18,7 @@ CREATE TABLE metrics (
   processname char(50) not null,
   machinename char(50) not null,
   parentPID char(10),
-  totalsize int,
+  totalsize bigint,
   dateofcreation date,
   PRIMARY KEY(PID,processname,machinename)
 );
